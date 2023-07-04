@@ -1,0 +1,109 @@
+### Create student
+POST localhost:8080/student/create
+Content-Type: application/json
+
+{
+  "name": "guli",
+  "surname": "g'unchayev",
+  "level": "elementary",
+  "age": 13,
+  "gender": "FEMALE"
+}
+
+
+
+### Get all student
+GET localhost:8080/student/all
+
+### Get by id
+GET localhost:8080/student/id/2
+
+### Get by name
+GET localhost:8080/student/name/guli
+
+### Get by surname
+GET localhost:8080/student/surname/valiyev
+
+### Get by level
+GET localhost:8080/student/level/elementary
+
+### Get by age
+GET localhost:8080/student/age/13
+
+### Get by date
+GET localhost:8080/student/date/2023-07-04
+
+### Get by dates
+GET localhost:8080/student/dates/2023-07-04/2023-07-06
+
+### Delete by id
+DELETE localhost:8080/student/1
+
+### update by id
+PUT localhost:8080/student/update/3
+Content-Type: application/json
+
+{
+  "name": "Alijon",
+  "surname": "Alihonov",
+  "age": 14
+}
+
+###  ********************************   Course  ************************************
+### Create course
+POST localhost:8080/course/create
+Content-Type: application/json
+
+{
+  "name": "english",
+  "price": "450000",
+  "duration": "9 month"
+}
+
+
+
+### Get all student
+GET localhost:8080/course/all
+
+### Get by id
+GET localhost:8080/course/id/2
+
+### Get by name
+GET localhost:8080/course/name/english
+
+### Get by price
+GET localhost:8080/course/price/450000
+
+### Get by duration
+GET localhost:8080/course/duration/9 month
+
+### Get by dates
+GET localhost:8080/course/dates/2023-07-04/2023-07-06
+
+### Get by prices
+GET localhost:8080/course/prices/400000/500000
+
+
+### Delete by id
+DELETE localhost:8080/course/1
+
+### update by id
+PUT localhost:8080/student/2
+Content-Type: application/json
+
+{
+  "name": "Alijon",
+  "surname": "Aliyevhon"
+}
+
+
+
+
+
+
+
+
+
+
+
+
