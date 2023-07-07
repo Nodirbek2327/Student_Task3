@@ -2,13 +2,20 @@ package com.example.service;
 
 import com.example.dto.CourseDTO;
 import com.example.entity.CourseEntity;
+import com.example.entity.StudentEntity;
 import com.example.exp.AppBadRequestException;
 import com.example.exp.ItemNotFoundException;
 import com.example.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +26,7 @@ public class CourseService {
     private CourseRepository courseRepository;
 
     public CourseDTO add(CourseDTO dto) {
-        dto.setCreatedDate(LocalDate.now());
+        dto.setCreatedDate(LocalDateTime.now());
         check(dto);
         CourseEntity entity = toEntity(dto);
         courseRepository.save(entity);
@@ -114,8 +121,57 @@ public class CourseService {
     }
 
     public List<CourseDTO> getByBetweenDates(LocalDate date1, LocalDate date2) {
-        List<CourseEntity> list = courseRepository.findAllByCreatedDateBetween(date1, date2);
+        LocalDateTime from = LocalDateTime.of(date1, LocalTime.MIN);
+        LocalDateTime to = LocalDateTime.of(date2, LocalTime.MAX);
+        List<CourseEntity> list = courseRepository.findAllByCreatedDateBetween(from, to);
         return getCourseDTOS(list);
+    }
+
+
+    public ResponseEntity<?> studentPagination(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<CourseEntity> pageObj  = courseRepository.findAll(pageable);
+        List<CourseEntity> entities = pageObj.getContent();
+        long totalCount = pageObj.getTotalElements();
+        return ResponseEntity.ok("totalCount = "+ totalCount+ " \n "+ getCourseDTOS(entities));
+    }
+
+    public ResponseEntity<?> studentPaginationByName(String name, int from, int to){
+        Pageable pageable = PageRequest.of(from, to);
+        Page<CourseEntity> pageObj  = courseRepository.findAllByNameOrderByCreatedDate(name, pageable);
+        List<CourseEntity> entities = pageObj.getContent();
+        long totalCount = pageObj.getTotalElements();
+        return ResponseEntity.ok("totalCount = "+ totalCount+ " \n "+ getCourseDTOS(entities));
+    }
+
+
+
+    public ResponseEntity<?> studentPaginationByPrice(String price, int from, int to){
+        Pageable pageable = PageRequest.of(from, to);
+        Page<CourseEntity> pageObj  = courseRepository.findAllByPriceOrderByCreatedDate(price, pageable);
+        List<CourseEntity> entities = pageObj.getContent();
+        long totalCount = pageObj.getTotalElements();
+        return ResponseEntity.ok("totalCount = "+ totalCount+ " \n "+ getCourseDTOS(entities));
+    }
+
+    public ResponseEntity<?> studentPaginationByPrices(String price1, String price2,  int from, int to){
+        Pageable pageable = PageRequest.of(from, to);
+        Page<CourseEntity> pageObj  = courseRepository.findAllByPriceBetweenOrderByCreatedDate(price1,
+                price2, pageable);
+        List<CourseEntity> entities = pageObj.getContent();
+        long totalCount = pageObj.getTotalElements();
+        return ResponseEntity.ok("totalCount = "+ totalCount+ " \n "+ getCourseDTOS(entities));
+    }
+
+    public ResponseEntity<?> studentPaginationByDates(LocalDate date1, LocalDate date2,  int from, int to){
+        LocalDateTime startTime = LocalDateTime.of(date1, LocalTime.MIN);
+        LocalDateTime endTime = LocalDateTime.of(date2, LocalTime.MAX);
+        Pageable pageable = PageRequest.of(from, to);
+        Page<CourseEntity> pageObj  = courseRepository.findAllByCreatedDateBetweenOrderByCreatedDate(startTime,
+                endTime, pageable);
+        List<CourseEntity> entities = pageObj.getContent();
+        long totalCount = pageObj.getTotalElements();
+        return ResponseEntity.ok("totalCount = "+ totalCount+ " \n "+ getCourseDTOS(entities));
     }
 
     private List<CourseDTO> getCourseDTOS(List<CourseEntity> list) {

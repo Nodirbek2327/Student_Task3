@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Setter
 @Getter
@@ -21,5 +22,5 @@ public class CourseEntity {
     @Column(name = "duration")
     private String duration;
     @Column(name = "created_date")
-    private LocalDate createdDate;
+    private LocalDateTime createdDate = LocalDateTime.now();
 }

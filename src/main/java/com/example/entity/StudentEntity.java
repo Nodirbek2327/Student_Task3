@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -25,5 +26,8 @@ public class StudentEntity {
     @Column(name = "gender")
     private String gender;
     @Column(name = "created_date")
-    private LocalDate createdDate;
+    private LocalDateTime createdDate =LocalDateTime.now();
+
+//    @Column(name = "visible")
+//    private Boolean visible = Boolean.TRUE;
 }

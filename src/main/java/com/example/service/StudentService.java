@@ -6,9 +6,15 @@ import com.example.exp.AppBadRequestException;
 import com.example.exp.ItemNotFoundException;
 import com.example.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +24,7 @@ public class StudentService {
     private StudentRepository studentRepository;
 
     public StudentDTO add(StudentDTO dto) {
-        dto.setCreatedDate(LocalDate.now());
+        dto.setCreatedDate(LocalDateTime.now());
         check(dto);
         StudentEntity entity = toEntity(dto);
         studentRepository.save(entity);
@@ -66,11 +72,11 @@ public class StudentService {
         return true;
     }
 
-    public Boolean update(Integer id, StudentDTO student) {
-        check(student);
-        int effectedRows = studentRepository.updateAttribute(id,  toEntity(student));
-        return effectedRows>0;
-    }
+//    public Boolean update(Integer id, StudentDTO student) {
+//        check(student);
+//        int effectedRows = studentRepository.updateAttribute(id,  toEntity(student));
+//        return effectedRows>0;
+//    }
 
     private void check(StudentDTO student) {
         if (student.getName() == null || student.getName().isBlank()) {
@@ -130,14 +136,77 @@ public class StudentService {
     }
 
     public List<StudentDTO> getByCreated_date(String date) {
-        List<StudentEntity> iterable = studentRepository.findAllByCreatedDate(LocalDate.parse(date));
+        List<StudentEntity> iterable = studentRepository.findAllByCreatedDateStartsWith(date);
         return getStudentDTOS(iterable);
     }
 
-    public List<StudentDTO> getByBetweenDates(LocalDate date1, LocalDate date2) {
-        List<StudentEntity> iterable = studentRepository.findAllByCreatedDateBetween(date1, date2);
+    public List<StudentDTO> getBetweenDates(LocalDate date1, LocalDate date2) {
+        LocalDateTime from = LocalDateTime.of(date1, LocalTime.MIN);
+        LocalDateTime to = LocalDateTime.of(date2, LocalTime.MAX);
+        List<StudentEntity> iterable = studentRepository.findAllByCreatedDateBetween(from, to);
         return getStudentDTOS(iterable);
     }
+
+
+    public ResponseEntity<?> studentPagination(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<StudentEntity> pageObj  = studentRepository.findAll(pageable);
+        List<StudentEntity> entities = pageObj.getContent();
+        long totalCount = pageObj.getTotalElements();
+        return ResponseEntity.ok("totalCount = "+ totalCount+ " \n "+ getStudentDTOS(entities));
+    }
+
+    public ResponseEntity<?> studentPaginationByLevel(String level, int from, int to){
+        Pageable pageable = PageRequest.of(from, to);
+        Page<StudentEntity> pageObj  = studentRepository.findStudentEntitiesByLevelOrderById(level, pageable);
+        List<StudentEntity> entities = pageObj.getContent();
+        long totalCount = pageObj.getTotalElements();
+        return ResponseEntity.ok("totalCount = "+ totalCount+ " \n "+ getStudentDTOS(entities));
+    }
+
+
+
+    public ResponseEntity<?> studentPaginationByGender(String gender, int from, int to){
+        Pageable pageable = PageRequest.of(from, to);
+        Page<StudentEntity> pageObj  = studentRepository.findAllByGenderOrderByCreatedDateAsc(gender, pageable);
+        List<StudentEntity> entities = pageObj.getContent();
+        long totalCount = pageObj.getTotalElements();
+        return ResponseEntity.ok("totalCount = "+ totalCount+ " \n "+ getStudentDTOS(entities));
+    }
+
+    public ResponseEntity<?> studentPaginationByBetweenDates(LocalDate date1, LocalDate date2,  int from, int to){
+        LocalDateTime startTime = LocalDateTime.of(date1, LocalTime.MIN);
+        LocalDateTime endTime = LocalDateTime.of(date2, LocalTime.MAX);
+        Pageable pageable = PageRequest.of(from, to);
+        Page<StudentEntity> pageObj  = studentRepository.findAllByCreatedDateBetweenOrderByCreatedDateAsc(startTime,
+                endTime, pageable);
+        List<StudentEntity> entities = pageObj.getContent();
+        long totalCount = pageObj.getTotalElements();
+        return ResponseEntity.ok("totalCount = "+ totalCount+ " \n "+ getStudentDTOS(entities));
+    }
+
+
+
+//******************************  Another  ****************************************
+    public List<StudentDTO> getBetweenAge(Integer from, Integer to) {
+        List<StudentEntity> iterable = studentRepository.findAllByAgeBetween(from, to);
+        return getStudentDTOS(iterable);
+    }
+
+
+
+    public List<StudentDTO> getDateIsAfter(LocalDate date) {
+        LocalDateTime from = LocalDateTime.of(date, LocalTime.MIN);
+        List<StudentEntity> iterable = studentRepository.findAllByCreatedDateAfter(from);
+        return getStudentDTOS(iterable);
+    }
+
+    public List<StudentDTO> getNameLike(String name) {
+        List<StudentEntity> iterable = studentRepository.findAllByNameLike("%"+name+"%");
+        return getStudentDTOS(iterable);
+    }
+
+
     private List<StudentDTO> getStudentDTOS(List<StudentEntity> list) {
         if (list.isEmpty()) {
             throw  new ItemNotFoundException("Student not found");
@@ -148,4 +217,6 @@ public class StudentService {
         });
         return dtoList;
     }
+
+
 }

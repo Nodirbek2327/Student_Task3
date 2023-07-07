@@ -68,6 +68,43 @@ public class CourseController {
         return ResponseEntity.badRequest().body("course Not Found");
     }
 
+    @GetMapping(value = "/pagination/{from}/{to}")
+    public ResponseEntity<?> pagination(@PathVariable("from") int from,
+                                        @PathVariable("to") int to) {
+        return ResponseEntity.ok(courseService.studentPagination(from, to));
+    }
+
+    @GetMapping(value = "/pagination/name/{name}/{from}/{to}")
+    public ResponseEntity<?> pagination(@PathVariable("name") String name,
+                                        @PathVariable("from") int from,
+                                        @PathVariable("to") int to) {
+        return ResponseEntity.ok(courseService.studentPaginationByName(name, from, to));
+    }
+
+    @GetMapping(value = "/pagination/price/{price}/{from}/{to}")
+    public ResponseEntity<?> paginationByGender(@PathVariable("price") String price,
+                                                @PathVariable("from") int from,
+                                                @PathVariable("to") int to) {
+        return ResponseEntity.ok(courseService.studentPaginationByPrice(price, from, to));
+    }
+
+    @GetMapping(value = "/pagination/prices/{price1}/{price2}/{from}/{to}")
+    public ResponseEntity<?> paginationByGender(@PathVariable("price1") String price1,
+                                                @PathVariable("price2") String price2,
+                                                @PathVariable("from") int from,
+                                                @PathVariable("to") int to) {
+        return ResponseEntity.ok(courseService.studentPaginationByPrices(price1, price2, from, to));
+    }
+
+    @GetMapping(value = "/pagination/createDate/{date1}/{date2}/{from}/{to}")
+    public ResponseEntity<?> paginationByGender(@PathVariable("date1") LocalDate date1,
+                                                @PathVariable("date2") LocalDate date2,
+                                                @PathVariable("from") int from,
+                                                @PathVariable("to") int to) {
+        return ResponseEntity.ok(courseService.studentPaginationByDates(date1, date2, from, to));
+    }
+
+
 //    @PutMapping(value = "/{id}")
 //    public ResponseEntity<?> put(@RequestBody CourseDTO courseDTO,
 //                                 @PathVariable("id") String id) {
