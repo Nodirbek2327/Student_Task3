@@ -56,43 +56,7 @@ public class StudentMarkController {
     public ResponseEntity<?> getByName(@PathVariable("id") Integer name) {
         return ResponseEntity.ok(studentMarkService.getMarksByCreatedDateDesc(name));
     }
-    @GetMapping(value = "/name/{name}")
-    public ResponseEntity<?> getByName(@PathVariable("name") String name) {
-        return ResponseEntity.ok(studentMarkService.getByName(name));
-    }
 
-    @GetMapping(value = "/surname/{surname}")
-    public ResponseEntity<?> getBySurname(@PathVariable("surname") String surname) {
-        return ResponseEntity.ok(studentMarkService.getBySurname(surname));
-    }
-
-    @GetMapping(value = "/level/{level}")
-    public ResponseEntity<?> getByLevel(@PathVariable("level") String level) {
-        return ResponseEntity.ok(studentMarkService.getByLevel(level));
-    }
-
-    @GetMapping(value = "/age/{age}")
-    public ResponseEntity<?> getByAge(@PathVariable("age") Integer age) {
-        return ResponseEntity.ok(studentMarkService.getByAge(age));
-    }
-
-    @GetMapping(value = "/gender/{gender}")
-    public ResponseEntity<?> getByGender(@PathVariable("gender") String gender) {
-        return ResponseEntity.ok(studentMarkService.getByGender(gender));
-    }
-
-//    @GetMapping(value = "/date/{createdDate}")
-//    public ResponseEntity<?> getByCreated_date(@PathVariable("createdDate") String date) {
-//        return ResponseEntity.ok(studentMarkService.getByCreated_date(date));
-//    }
-//
-//    @GetMapping(value = "/dates/{date1}/{date2}")
-//    public ResponseEntity<?> getByDates(@PathVariable("date1") String date1,
-//                                        @PathVariable("date2") String date2) {
-//        return ResponseEntity.ok(studentMarkService.getBetweenDates(LocalDate.parse(date1),LocalDate.parse(date2)));
-//    }
-//
-//
 //    @GetMapping(value = "/pagination/{from}/{to}")
 //    public ResponseEntity<?> pagination(@PathVariable("from") int from,
 //                                        @PathVariable("to") int to) {
