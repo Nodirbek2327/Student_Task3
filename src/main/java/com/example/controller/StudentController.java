@@ -14,7 +14,6 @@ import java.util.List;
 public class StudentController {
     @Autowired
     private StudentService studentService;
-// ulugbek sobegjonov
     @PostMapping(value = "/create")
     public ResponseEntity<?> create(@RequestBody StudentDTO student) {
         StudentDTO response = studentService.add(student);
@@ -33,11 +32,11 @@ public class StudentController {
     }
 
 
-//    @PutMapping(value = "/update/{id}")
-//    public ResponseEntity<?> put(@RequestBody StudentDTO student,
-//                                 @PathVariable("id") Integer id) {
-//        return ResponseEntity.ok( studentService.update(id, student));
-//    }
+    @PutMapping(value = "/update/{id}")
+    public ResponseEntity<?> put(@RequestBody StudentDTO student,
+                                 @PathVariable("id") Integer id) {
+        return ResponseEntity.ok( studentService.update(id, student));
+    }
 
 
     @DeleteMapping(value = "/{id}")
@@ -89,21 +88,21 @@ public class StudentController {
     @GetMapping(value = "/pagination/{from}/{to}")
     public ResponseEntity<?> pagination(@PathVariable("from") int from,
                                         @PathVariable("to") int to) {
-        return ResponseEntity.ok(studentService.studentPagination(from, to));
+        return ResponseEntity.ok(studentService.studentPagination(from-1, to));
     }
 
     @GetMapping(value = "/pagination/level/{level}/{from}/{to}")
     public ResponseEntity<?> pagination(@PathVariable("level") String level,
                                         @PathVariable("from") int from,
                                         @PathVariable("to") int to) {
-        return ResponseEntity.ok(studentService.studentPaginationByLevel(level, from, to));
+        return ResponseEntity.ok(studentService.studentPaginationByLevel(level, from-1, to));
     }
 
     @GetMapping(value = "/pagination/gender/{gender}/{from}/{to}")
     public ResponseEntity<?> paginationByGender(@PathVariable("gender") String gender,
                                         @PathVariable("from") int from,
                                         @PathVariable("to") int to) {
-        return ResponseEntity.ok(studentService.studentPaginationByGender(gender, from, to));
+        return ResponseEntity.ok(studentService.studentPaginationByGender(gender, from-1, to));
     }
 
     @GetMapping(value = "/pagination/createDate/{date1}/{date2}/{from}/{to}")
@@ -111,31 +110,31 @@ public class StudentController {
                                                 @PathVariable("date2") LocalDate date2,
                                                 @PathVariable("from") int from,
                                                 @PathVariable("to") int to) {
-        return ResponseEntity.ok(studentService.studentPaginationByBetweenDates(date1, date2, from, to));
+        return ResponseEntity.ok(studentService.studentPaginationByBetweenDates(date1, date2, from-1, to));
     }
 
 
 //************************************  Another  project   **************************************
-    @GetMapping(value = "/ages/{from}/{to}")
-    public ResponseEntity<?> getByAges(@PathVariable("from") Integer from,
-                                       @PathVariable("to") Integer to) {
-        return ResponseEntity.ok(studentService.getBetweenAge(from, to));
-    }
-
-//    @GetMapping(value = "/date/{date}")
-//    public ResponseEntity<?> getByDate(@PathVariable("date") String date) {
-//        return ResponseEntity.ok(studentService.getBetweenDate(LocalDate.parse(date)));
+//    @GetMapping(value = "/ages/{from}/{to}")
+//    public ResponseEntity<?> getByAges(@PathVariable("from") Integer from,
+//                                       @PathVariable("to") Integer to) {
+//        return ResponseEntity.ok(studentService.getBetweenAge(from, to));
 //    }
-
-    @GetMapping(value = "/isAfter/{date}")
-    public ResponseEntity<?> getByDate(@PathVariable("date") LocalDate date) {
-        return ResponseEntity.ok(studentService.getDateIsAfter(date));
-    }
-
-    @GetMapping(value = "/likeName/{name}")
-    public ResponseEntity<?> getNameLike(@PathVariable("name") String name) {
-        return ResponseEntity.ok(studentService.getNameLike(name));
-    }
+//
+////    @GetMapping(value = "/date/{date}")
+////    public ResponseEntity<?> getByDate(@PathVariable("date") String date) {
+////        return ResponseEntity.ok(studentService.getBetweenDate(LocalDate.parse(date)));
+////    }
+//
+//    @GetMapping(value = "/isAfter/{date}")
+//    public ResponseEntity<?> getByDate(@PathVariable("date") LocalDate date) {
+//        return ResponseEntity.ok(studentService.getDateIsAfter(date));
+//    }
+//
+//    @GetMapping(value = "/likeName/{name}")
+//    public ResponseEntity<?> getNameLike(@PathVariable("name") String name) {
+//        return ResponseEntity.ok(studentService.getNameLike(name));
+//    }
 
     @PostMapping(value = "/ageIn")
     public ResponseEntity<?> getByDate(@RequestBody List<Integer> idList) {

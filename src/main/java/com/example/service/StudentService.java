@@ -6,9 +6,7 @@ import com.example.exp.AppBadRequestException;
 import com.example.exp.ItemNotFoundException;
 import com.example.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -72,11 +70,11 @@ public class StudentService {
         return true;
     }
 
-//    public Boolean update(Integer id, StudentDTO student) {
-//        check(student);
-//        int effectedRows = studentRepository.updateAttribute(id,  toEntity(student));
-//        return effectedRows>0;
-//    }
+    public Boolean update(Integer id, StudentDTO student) {
+        check(student);
+        int effectedRows = studentRepository.updateAttribute(id,  toEntity(student));
+        return effectedRows>0;
+    }
 
     private void check(StudentDTO student) {
         if (student.getName() == null || student.getName().isBlank()) {
@@ -136,7 +134,7 @@ public class StudentService {
     }
 
     public List<StudentDTO> getByCreated_date(String date) {
-        List<StudentEntity> iterable = studentRepository.findAllByCreatedDateStartsWith(date);
+        List<StudentEntity> iterable = studentRepository.findAllByCreatedDateStartsWith(date+"%");
         return getStudentDTOS(iterable);
     }
 
@@ -148,12 +146,22 @@ public class StudentService {
     }
 
 
-    public ResponseEntity<?> studentPagination(int page, int size){
+//    public ResponseEntity<?> studentPagination(int page, int size){
+//        Pageable pageable = PageRequest.of(page, size);
+//        Page<StudentEntity> pageObj  = studentRepository.findAll(pageable);
+//        List<StudentEntity> entities = pageObj.getContent();
+//        long totalCount = pageObj.getTotalElements();
+//        return ResponseEntity.ok("totalCount = "+ totalCount+ " \n "+ getStudentDTOS(entities));
+//    }
+
+    public PageImpl<StudentDTO> studentPagination(int page, int size) {
+        Sort sort = Sort.by(Sort.Direction.ASC, "id"); //  sort qilishga pageablega berib yuboramiz
         Pageable pageable = PageRequest.of(page, size);
-        Page<StudentEntity> pageObj  = studentRepository.findAll(pageable);
-        List<StudentEntity> entities = pageObj.getContent();
-        long totalCount = pageObj.getTotalElements();
-        return ResponseEntity.ok("totalCount = "+ totalCount+ " \n "+ getStudentDTOS(entities));
+        Page<StudentEntity> pageObj = studentRepository.findAll(pageable);
+//        List<StudentEntity> entityList = pageObj.getContent();
+//        long totalCount = pageObj.getTotalElements();
+        PageImpl<StudentDTO> pageImpl = new PageImpl<>(getStudentDTOS(pageObj.getContent()), pageable, pageObj.getTotalElements());
+        return pageImpl;
     }
 
     public ResponseEntity<?> studentPaginationByLevel(String level, int from, int to){
@@ -188,23 +196,23 @@ public class StudentService {
 
 
 //******************************  Another  ****************************************
-    public List<StudentDTO> getBetweenAge(Integer from, Integer to) {
-        List<StudentEntity> iterable = studentRepository.findAllByAgeBetween(from, to);
-        return getStudentDTOS(iterable);
-    }
-
-
-
-    public List<StudentDTO> getDateIsAfter(LocalDate date) {
-        LocalDateTime from = LocalDateTime.of(date, LocalTime.MIN);
-        List<StudentEntity> iterable = studentRepository.findAllByCreatedDateAfter(from);
-        return getStudentDTOS(iterable);
-    }
-
-    public List<StudentDTO> getNameLike(String name) {
-        List<StudentEntity> iterable = studentRepository.findAllByNameLike("%"+name+"%");
-        return getStudentDTOS(iterable);
-    }
+//    public List<StudentDTO> getBetweenAge(Integer from, Integer to) {
+//        List<StudentEntity> iterable = studentRepository.findAllByAgeBetween(from, to);
+//        return getStudentDTOS(iterable);
+//    }
+//
+//
+//
+//    public List<StudentDTO> getDateIsAfter(LocalDate date) {
+//        LocalDateTime from = LocalDateTime.of(date, LocalTime.MIN);
+//        List<StudentEntity> iterable = studentRepository.findAllByCreatedDateAfter(from);
+//        return getStudentDTOS(iterable);
+//    }
+//
+//    public List<StudentDTO> getNameLike(String name) {
+//        List<StudentEntity> iterable = studentRepository.findAllByNameLike("%"+name+"%");
+//        return getStudentDTOS(iterable);
+//    }
 
 
     private List<StudentDTO> getStudentDTOS(List<StudentEntity> list) {

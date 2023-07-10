@@ -68,7 +68,7 @@ Content-Type: application/json
 
 
 ### Get by pagination
-GET localhost:8080/student/pagination/1/4
+GET localhost:8080/student/pagination/2/2
 
 
 ### Get by paginationbylevel

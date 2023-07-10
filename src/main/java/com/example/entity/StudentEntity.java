@@ -28,6 +28,16 @@ public class StudentEntity {
     @Column(name = "created_date")
     private LocalDateTime createdDate =LocalDateTime.now();
 
-//    @Column(name = "visible")
+    public StudentEntity(Integer id, String name, String surname) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+    }
+
+    public StudentEntity() {
+
+    }
+
+    //    @Column(name = "visible")
 //    private Boolean visible = Boolean.TRUE;
 }
