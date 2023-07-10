@@ -69,23 +69,23 @@ public interface StudentMarkRepository extends CrudRepository<StudentMarkEntity,
 
  @Transactional
  @Modifying
- @Query("from StudentMarkEntity  order by mark desc ")
+ @Query("from StudentMarkEntity  order by mark desc limit 3")
  List<StudentMarkEntity> getTop3StudentByMark();
 
  @Transactional
  @Modifying
- @Query("from StudentMarkEntity as s where s.id = :id order by s.createdDate asc ")
- List<StudentMarkEntity> getStudentFirstMark(@Param("id") Integer id);
+ @Query("from StudentMarkEntity as s where s.id = :id order by s.createdDate asc limit 1")
+ StudentMarkEntity getStudentFirstMark(@Param("id") Integer id);
 
  @Transactional
  @Modifying
- @Query("from StudentMarkEntity as s where s.courseId.name = :name order by s.createdDate asc ")
- List<StudentMarkEntity> getStudentFirstMarkByCourse(@Param("name") String name);
+ @Query("from StudentMarkEntity as s where s.courseId.name = :name order by s.createdDate asc limit 1")
+ StudentMarkEntity getStudentFirstMarkByCourse(@Param("name") String name);
 
  @Transactional
  @Modifying
- @Query("from StudentMarkEntity as s where s.id = :id and s.courseId.name = :name order by s.mark desc ")
- List<StudentMarkEntity> getStudentBestMarkByCourse(@Param("id") Integer id, @Param("name") String name);
+ @Query("from StudentMarkEntity as s where s.id = :id and s.courseId.name = :name order by s.mark desc limit 1")
+ StudentMarkEntity getStudentBestMarkByCourse(@Param("id") Integer id, @Param("name") String name);
 
  @Transactional
  @Modifying

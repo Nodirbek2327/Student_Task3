@@ -78,6 +78,43 @@ public class StudentMarkService {
         return studentMarkRepository.getStudentMarkByCreatedDate(id);
     }
 
+    public List<Double> getAllStudentMarkByCreatedDate() {
+        return studentMarkRepository.getAllStudentMarkByCreatedDate();
+    }
+
+    public StudentMarkDTO getStudentLastMark(Integer id) {
+        List<StudentMarkEntity>  list = studentMarkRepository.getStudentLastMark(id);
+        return toDTO(list.get(0));
+    }
+
+    public List<StudentMarkDTO> getTop3StudentByMark() {
+        return getStudentMarkDTOS(studentMarkRepository.getTop3StudentByMark());
+    }
+
+    public StudentMarkDTO getStudentFirstMark(Integer id) {
+        return toDTO(studentMarkRepository.getStudentFirstMark(id));
+    }
+
+
+    public StudentMarkDTO getStudentFirstMarkByCourse(String name) {
+        return toDTO(studentMarkRepository.getStudentFirstMarkByCourse(name));
+    }
+
+    public StudentMarkDTO getStudentFirstMarkByCourse(Integer id, String name) {
+        return toDTO(studentMarkRepository.getStudentBestMarkByCourse(id, name));
+    }
+
+    public double getStudentMediumMark(Integer id) {
+        return studentMarkRepository.getStudentMediumMark(id);
+    }
+
+    public double getStudentMediumMarkByCourse(Integer id, String name) {
+        return studentMarkRepository.getStudentMediumMarkByCourse(id, name);
+    }
+
+    public double getStudentBigMark(Integer id, double mark) {
+        return studentMarkRepository.getStudentBigMark(id, mark);
+    }
 
 ////    public Boolean update(Integer id, StudentDTO student) {
 ////        check(student);

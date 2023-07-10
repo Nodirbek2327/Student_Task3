@@ -53,9 +53,50 @@ public class StudentMarkController {
     }
 
     @GetMapping(value = "/marks/{id}")
-    public ResponseEntity<?> getByName(@PathVariable("id") Integer name) {
+    public ResponseEntity<?> getStudentMarksById(@PathVariable("id") Integer name) {
         return ResponseEntity.ok(studentMarkService.getMarksByCreatedDateDesc(name));
     }
+
+    @GetMapping(value = "/marks")
+    public ResponseEntity<?> getAllMarks() {
+        return ResponseEntity.ok(studentMarkService.getAllStudentMarkByCreatedDate());
+    }
+
+    @GetMapping(value = "/mark/last/{id}")
+    public ResponseEntity<?> getStudentLAstMarkById(@PathVariable("id") Integer name) {
+        return ResponseEntity.ok(studentMarkService.getStudentLastMark(name));
+    }
+
+    @GetMapping(value = "/top3")
+    public ResponseEntity<?> getTop3Student() {
+        return ResponseEntity.ok(studentMarkService.getTop3StudentByMark());
+    }
+
+    @GetMapping(value = "/first/mark/{id}")
+    public ResponseEntity<?> getFirstMark(@PathVariable("id") Integer id) {
+        return ResponseEntity.ok(studentMarkService.getStudentFirstMark(id));
+    }
+
+    @GetMapping(value = "/first/mark/{name}")
+    public ResponseEntity<?> getFirstMark(@PathVariable("name") String name) {
+        return ResponseEntity.ok(studentMarkService.getStudentFirstMarkByCourse(name));
+    }
+
+    @GetMapping(value = "/first/mark/{id}/{name}")
+    public ResponseEntity<?> getFirstMark(@PathVariable("id") Integer id, @PathVariable("name") String name) {
+        return ResponseEntity.ok(studentMarkService.getStudentFirstMarkByCourse(id,name));
+    }
+
+    @GetMapping(value = "/medium/mark/{id}")
+    public ResponseEntity<?> getMediumMark(@PathVariable("id") Integer id) {
+        return ResponseEntity.ok(studentMarkService.getStudentMediumMark(id));
+    }
+
+    @GetMapping(value = "/medium/mark/{id}/{name}")
+    public ResponseEntity<?> getMediumMark(@PathVariable("id") Integer id, @PathVariable("name") String name) {
+        return ResponseEntity.ok(studentMarkService.getStudentMediumMarkByCourse(id,name));
+    }
+
 
 //    @GetMapping(value = "/pagination/{from}/{to}")
 //    public ResponseEntity<?> pagination(@PathVariable("from") int from,
